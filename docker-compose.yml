@@ -1,0 +1,51 @@
+version: "3.4"
+
+networks:
+  app:
+    driver: bridge
+
+services:
+  web:
+    image: 'bitnami/nginx:1.21'
+    restart: always
+    depends_on:
+      - phpfpm
+      - db
+    networks:
+      - app
+    ports:
+      - ${WEBPORT_MAP}
+    volumes:
+      - ./app:/framelix
+      - ./nginx-config.conf:/opt/bitnami/nginx/conf/server_blocks/default.conf
+      - ./config/nginx-config-snippet.conf:/opt/bitnami/nginx/nginx-config-snippet.conf
+      - ${NGINX_SSL_CERT}:/opt/bitnami/nginx/certs/ssl.crt
+      - ${NGINX_SSL_KEY}:/opt/bitnami/nginx/certs/ssl.key
+  phpfpm:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - app
+    volumes:
+      - ./app:/framelix
+      - ./config/php-fpm-entrypoint-bootstrap.php:/framelix-scripts/php-fpm-entrypoint-bootstrap.php
+      - ./config/php-fpm.conf:/opt/bitnami/php/etc/php-fpm.d/www-custom.conf
+    environment:
+      - FRAMELIX_SETUP_DB_HOST=db
+      - FRAMELIX_SETUP_DB_USER=app
+      - FRAMELIX_SETUP_DB_PASS=app
+      - FRAMELIX_SETUP_DB_NAME=app
+  db:
+    image: mariadb:10.7
+    restart: always
+    networks:
+      - app
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: 1
+      MARIADB_USER: app
+      MARIADB_PASSWORD : app
+      MARIADB_DATABASE : app
