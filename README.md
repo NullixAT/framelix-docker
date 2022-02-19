@@ -15,10 +15,6 @@ First, clone (or download a zip of) this repository and generate default configs
     cp config/env-default .env
     cp config/nginx-config-template.conf nginx-config.conf
 
-#### Modify nginx-config.conf
-
-You need to replace `{module}` with your module name. In case of this demo, this is `Demo`
-
 #### Modify .env
 
 `FRAMELIX_MODULE` should be your module name, which in this demo is `Demo`.
@@ -51,7 +47,11 @@ docker installations of PageMyself on one host and even have other services on t
 
 > If you change https/http and the app is already installed, you must modify `app/modules/Demo/config-editable.php` as well.
 
-## Run
+## Build and Run
+
+After changing something in the configs or on initial setup, run:
+
+    docker-compose build
 
 Star the docker service with:
 
