@@ -43,7 +43,7 @@ use [Certbot](https://certbot.eff.org/).
 
 However, recommended way is to have a separate webserver running on the host, which acts as a reverse proxy, which
 handles certificates and other stuff. See config example for Nginx down bellow. With this way, you can setup multiple
-docker installations of PageMyself on one host and even have other services on the public port.
+docker installations on one host and even have other services on the public port.
 
 > If you change https/http and the app is already installed, you must modify `app/modules/Demo/config-editable.php` as well.
 
@@ -71,14 +71,14 @@ backup.
 
 > Warning: This step requires to delete all existing data and to shut down the docker service.
 
-The downloaded `backup.zip` contains 2 folders: `appdatabase` and `appdatabase`.
+The downloaded `backup.zip` contains 2 folders: `appfiles` and `appdatabase`.
 
 1. Shutdown the service with `docker-compose down`
 2. Attention: Delete everything in `app` and delete everything in `db`
 3. Copy the `backup.zip` into `app/backup.zip`
 4. Start the container with `docker-compose up`
 5. (Optional) Maybe you've moved from another installation, db or whatever to this docker container, you probably need
-   to modify `modules/Myself/config-editable.php` db and other settings to your needs to make it fully functional
+   to modify `modules/{module}}/config-editable.php` db and other settings to your needs to make it fully functional
 
 ### Example Nginx Config
 
