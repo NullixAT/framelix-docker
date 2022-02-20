@@ -64,7 +64,25 @@ All application source files and uploaded files in the application are in the fo
 
 All database files are in the folder `db`.
 
-## Install/Restore from an app backup
+## Backup Database
+You can either backup the whole `db` folder or you can do a proper sql dump with:
+
+`docker-compose exec db mysqldump app -u app -papp > backup.sql` which stores a backup to `backup.sql`
+
+## Restore database
+
+Restore from a dump sql file:
+
+`docker-compose exec db mysql app -u app -papp app < backup.sql`
+
+Or, if you have a backup of the whole `db` folder:
+1. shutdown the service `docker-compose down`
+2. Delete everything in `db`
+3. Copy your backup files back into `db`
+4. Start the service `docker-compose up -d`
+
+
+## Install/Restore from a full app backup
 
 Follow this steps if you have made an app backup downloaded from the backend and you want to revert to the state of the
 backup.
