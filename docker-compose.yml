@@ -30,6 +30,7 @@ services:
       - app
     volumes:
       - ./app:/framelix
+      - ./nodejs:/usr/local/lib/nodejs
       - ./config/php-fpm-entrypoint-bootstrap.php:/framelix-scripts/php-fpm-entrypoint-bootstrap.php
       - ./config/php-fpm.conf:/opt/bitnami/php/etc/php-fpm.d/www-custom.conf
       - ./nginx-config.conf:/framelix-scripts/nginx-config.conf

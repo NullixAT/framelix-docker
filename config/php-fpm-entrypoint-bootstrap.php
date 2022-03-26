@@ -2,6 +2,21 @@
 
 $rootFolder = "/framelix";
 
+$module = $_SERVER['FRAMELIX_MODULE'] ?? null;
+if (!$module) {
+    echo "[ERROR] Module not defined in .env";
+    exit(1);
+}
+
+
+// updating nginx config
+$nginxConfigPath = '/framelix-scripts/nginx-config.conf';
+$nginxConfigOriginal = file_get_contents($nginxConfigPath);
+$nginxConfig = preg_replace("~framelix/modules/(.*?)/~", "framelix/modules/$module/", $nginxConfigOriginal);
+if ($nginxConfig !== $nginxConfigOriginal) {
+    file_put_contents($nginxConfigPath, $nginxConfig);
+}
+
 // do some checks if already installed
 if (
     !is_dir($rootFolder) ||
@@ -11,19 +26,6 @@ if (
 ) {
     return;
 }
-
-$module = $_SERVER['FRAMELIX_MODULE'] ?? null;
-if (!$module) {
-    echo "[ERROR] Module not defined in .env";
-    exit(1);
-}
-
-// updating nginx config
-$nginxConfigPath = '/framelix-scripts/nginx-config.conf';
-$nginxConfig = file_get_contents($nginxConfigPath);
-$nginxConfig = preg_replace("~framelix/modules/(.*?)/~", "framelix/modules/$module/", $nginxConfig);
-file_put_contents($nginxConfigPath, $nginxConfig);
-
 // check if backup exist, if so, import
 if (file_exists($rootFolder . "/backup.zip")) {
     // to many files in folder, stop
