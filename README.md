@@ -12,7 +12,7 @@ Here a quick starter:
 
     git clone https://github.com/NullixAT/framelix-docker.git
     cd framelix-docker
-    git clone --branch main YOUR_APP_REPOSITORY_URL app
+    git clone --recurse-submodules --branch main YOUR_APP_REPOSITORY_URL app
     docker-compose build
     docker-compose up -d
 
