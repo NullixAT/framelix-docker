@@ -1,5 +1,3 @@
-FRAMELIX_MODULE=
-INITIAL_GITHUB_RELEASE_URL=
 WEBPORT_MAP=8080:443
 NGINX_SSL_CERT=./config/nginx-selfsigned.crt
 NGINX_SSL_KEY=./config/nginx-selfsigned.key

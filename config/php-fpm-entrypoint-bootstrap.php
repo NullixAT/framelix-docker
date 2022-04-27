@@ -1,20 +1,17 @@
 <?php
 
 $rootFolder = "/framelix";
+$moduleFile = $rootFolder . "/MODULE";
 
-$module = $_SERVER['FRAMELIX_MODULE'] ?? null;
-if (!$module) {
-    echo "[ERROR] Module not defined in .env";
+if (!file_exists($moduleFile)) {
+    echo "[ERROR] No MODULE file exists in app folder";
     exit(1);
 }
-
-
-// updating nginx config
-$nginxConfigPath = '/framelix-scripts/nginx-config.conf';
-$nginxConfigOriginal = file_get_contents($nginxConfigPath);
-$nginxConfig = preg_replace("~framelix/modules/(.*?)/~", "framelix/modules/$module/", $nginxConfigOriginal);
-if ($nginxConfig !== $nginxConfigOriginal) {
-    file_put_contents($nginxConfigPath, $nginxConfig);
+$module = trim(file_get_contents($moduleFile));
+$moduleFolder = $rootFolder . "/modules/" . $module;
+if (!is_dir($moduleFolder)) {
+    echo "[ERROR] Module directory not exists in app/modules/$module folder";
+    exit(1);
 }
 
 // do some checks if already installed

@@ -15,12 +15,16 @@ services:
       - app
     ports:
       - ${WEBPORT_MAP}
+    environment:
+      - FRAMELIX_MODULE
     volumes:
       - ./app:/framelix
-      - ./nginx-config.conf:/opt/bitnami/nginx/conf/server_blocks/default.conf
       - ./config/nginx-config-snippet.conf:/opt/bitnami/nginx/nginx-config-snippet.conf
+      - ./config/nginx-config.conf:/opt/bitnami/nginx/nginx-config-template.conf
+      - ./config/nginx-run.sh:/opt/bitnami/scripts/nginx/framelix-run.sh
       - ${NGINX_SSL_CERT}:/opt/bitnami/nginx/certs/ssl.crt
       - ${NGINX_SSL_KEY}:/opt/bitnami/nginx/certs/ssl.key
+    command: /opt/bitnami/scripts/nginx/framelix-run.sh
   phpfpm:
     build: .
     restart: always
@@ -33,10 +37,8 @@ services:
       - ./nodejs:/usr/local/lib/nodejs
       - ./config/php-fpm-entrypoint-bootstrap.php:/framelix-scripts/php-fpm-entrypoint-bootstrap.php
       - ./config/php-fpm.conf:/opt/bitnami/php/etc/php-fpm.d/www-custom.conf
-      - ./nginx-config.conf:/framelix-scripts/nginx-config.conf
     environment:
       - FRAMELIX_MODULE
-      - INITIAL_GITHUB_RELEASE_URL
       - FRAMELIX_SETUP_DB_HOST=db
       - FRAMELIX_SETUP_DB_USER=app
       - FRAMELIX_SETUP_DB_PASS=app
