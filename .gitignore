@@ -1,3 +1,4 @@
 .env
 .idea
 nginx-config.conf
+app/*
