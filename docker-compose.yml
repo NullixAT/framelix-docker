@@ -19,6 +19,7 @@ services:
       - FRAMELIX_MODULE
     volumes:
       - ./app:/framelix
+      - ./config/error-pages:/framelix-error-pages
       - ./config/nginx-config-snippet.conf:/opt/bitnami/nginx/nginx-config-snippet.conf
       - ./config/nginx-config.conf:/opt/bitnami/nginx/nginx-config-template.conf
       - ./config/nginx-run.sh:/opt/bitnami/scripts/nginx/framelix-run.sh
