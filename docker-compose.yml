@@ -22,10 +22,13 @@ services:
       - ./config/error-pages:/framelix-error-pages
       - ./config/nginx-config-snippet.conf:/opt/bitnami/nginx/nginx-config-snippet.conf
       - ./config/nginx-config.conf:/opt/bitnami/nginx/nginx-config-template.conf
-      - ./config/nginx-run.sh:/opt/bitnami/scripts/nginx/framelix-run.sh
+      - ./config/nginx-run.sh:/framelix-scripts/nginx-run.sh
       - ${NGINX_SSL_CERT}:/opt/bitnami/nginx/certs/ssl.crt
       - ${NGINX_SSL_KEY}:/opt/bitnami/nginx/certs/ssl.key
-    command: /opt/bitnami/scripts/nginx/framelix-run.sh
+    command: >
+      bash -c "cp /framelix-scripts/nginx-run.sh /opt/bitnami/scripts/nginx/framelix-run.sh && 
+                chmod 0777 /opt/bitnami/scripts/nginx/framelix-run.sh && 
+                /opt/bitnami/scripts/nginx/framelix-run.sh"
   phpfpm:
     build: .
     restart: always

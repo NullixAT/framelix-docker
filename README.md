@@ -21,6 +21,8 @@ always, also after host reboot.
 
 #### Configuring port and http/https config
 
+By default, port 8686 is used and uses https.
+
 There are 2 ports available inside the service:
 
 * `80` for http handling. Example: `WEBPORT_MAP=8686:80`

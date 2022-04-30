@@ -1,3 +1,3 @@
-WEBPORT_MAP=8080:443
+WEBPORT_MAP=8686:443
 NGINX_SSL_CERT=./config/nginx-selfsigned.crt
 NGINX_SSL_KEY=./config/nginx-selfsigned.key
