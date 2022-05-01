@@ -79,32 +79,10 @@ if (file_exists($rootFolder . "/backup.zip")) {
 $files = scandir($rootFolder);
 $zipFile = null;
 foreach ($files as $file) {
-    if (str_starts_with($file, "release") && str_ends_with($file, ".zip")) {
+    if (str_contains($file, "release") && str_ends_with($file, ".zip")) {
         $zipFile = $rootFolder . "/" . $file;
         break;
     }
-}
-
-if (($_SERVER['INITIAL_GITHUB_RELEASE_URL'] ?? null) && !$zipFile) {
-    $zipFile = $rootFolder . "/release.zip";
-    // fresh new installation with auto download from github
-    $context = stream_context_create([
-            'http' => [
-                'method' => "GET",
-                'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
-            ]
-        ]
-    );
-
-    $releaseData = json_decode(
-        file_get_contents(
-            $_SERVER['INITIAL_GITHUB_RELEASE_URL'],
-            false,
-            $context
-        ),
-        true
-    );
-    file_put_contents($zipFile, file_get_contents($releaseData['assets'][0]['browser_download_url'], 0, $context));
 }
 
 if (file_exists($zipFile)) {
