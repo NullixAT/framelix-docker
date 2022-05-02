@@ -1,30 +1,46 @@
 #!/bin/bash
 
-# install or update nodejs if required
 NODEDIR="/usr/local/lib/nodejs"
-if [ ! -d "$NODEDIR/bin" ] ; then
+if [ ! -d "$NODEDIR/bin" ]; then
+  echo "===Downloading NodeJS==="
   wget -qO- https://nodejs.org/dist/v16.14.2/node-v16.14.2-linux-x64.tar | tar -xv --strip 1 -C $NODEDIR
+  echo "===Done==="
+  echo ""
 fi
 
-# symlink node and npm
+echo "===Creating NodeJS Symlinks==="
 ln -s $NODEDIR/bin/node /usr/bin/node
 ln -s $NODEDIR/bin/npm /usr/bin/npm
+echo "===Done==="
+  echo ""
 
-# start cron
+echo "===Starting cron==="
 service cron start
+echo "===Done==="
+  echo ""
 
-# run bootstrap script
+echo "===Running Framelix Bootstrap==="
 /opt/bitnami/php/bin/php /framelix-scripts/php-fpm-entrypoint-bootstrap.php
+status=$?
 
-# forcing all files to daemon user
-chown -R daemon:daemon /framelix
+if test $status -eq 0; then
+  echo "===Done==="
+  echo ""
 
-# run npm install if not yet installed
-if [ ! -d "/framelix/modules/Framelix/node_modules" ] ; then
-  cd /framelix/modules/Framelix
-  npm install
+  echo "===Forcing all appfiles to run under daemon user==="
+  chown -R daemon:daemon /framelix
+  echo "===Done==="
+  echo ""
+
+  echo "===Run NPM install in modules/Framelix ==="
+    cd /framelix/modules/Framelix
+    npm install
+  echo "===Done==="
+  echo ""
+
+  echo "===Starting PHP-fpm ==="
+  php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
+
+else
+  echo "===Failed==="
 fi
-
-# start fpm process
-php-fpm -F --pid /opt/bitnami/php/tmp/php-fpm.pid -y /opt/bitnami/php/etc/php-fpm.conf
-

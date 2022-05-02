@@ -3,26 +3,15 @@
 $rootFolder = "/framelix";
 $moduleFile = $rootFolder . "/MODULE";
 
-if (!file_exists($moduleFile)) {
-    echo "[ERROR] No MODULE file exists in app folder";
-    exit(1);
-}
-$module = trim(file_get_contents($moduleFile));
-$moduleFolder = $rootFolder . "/modules/" . $module;
-if (!is_dir($moduleFolder)) {
-    echo "[ERROR] Module directory not exists in app/modules/$module folder";
-    exit(1);
-}
-
 // do some checks if already installed
 if (
     !is_dir($rootFolder) ||
-    file_exists($rootFolder . "/install.php") ||
-    file_exists($rootFolder . "/index.php") ||
+    file_exists($moduleFile) ||
     is_dir($rootFolder . "/modules")
 ) {
     return;
 }
+
 // check if backup exist, if so, import
 if (file_exists($rootFolder . "/backup.zip")) {
     // to many files in folder, stop
@@ -94,8 +83,16 @@ if (file_exists($zipFile)) {
     $zipArchive->extractTo($rootFolder);
     $zipArchive->close();
     unlink($zipFile);
+}
 
-    // call install process right away
-    $_GET['unpack'] = 1;
-    include_once $rootFolder . "/install.php";
+if (!file_exists($moduleFile)) {
+    echo "[ERROR] No MODULE file exists in app folder";
+    exit(1);
+}
+
+$module = trim(file_get_contents($moduleFile));
+$moduleFolder = $rootFolder . "/modules/" . $module;
+if (!is_dir($moduleFolder)) {
+    echo "[ERROR] Module directory not exists in app/modules/$module folder";
+    exit(1);
 }
