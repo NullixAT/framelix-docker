@@ -31,11 +31,11 @@ if (file_exists($rootFolder . "/backup.zip")) {
     }
 
     $mysql = new mysqli("db", "app", "app", "app");
-    $zipFile = $rootFolder . "/backup.zip";
+    $releaseArchivePath = $rootFolder . "/backup.zip";
     $zipArchive = new ZipArchive();
-    $openResult = $zipArchive->open($zipFile, ZipArchive::RDONLY);
+    $openResult = $zipArchive->open($releaseArchivePath, ZipArchive::RDONLY);
     if ($openResult !== true) {
-        throw new Exception("Cannot open ZIP File '$zipFile' ($openResult)");
+        throw new Exception("Cannot open ZIP File '$releaseArchivePath' ($openResult)");
     }
     $zipArchive->extractTo($rootFolder);
     $zipArchive->close();
@@ -64,25 +64,20 @@ if (file_exists($rootFolder . "/backup.zip")) {
     exit;
 }
 
-// find a release zip file
+// find a release tar file
 $files = scandir($rootFolder);
-$zipFile = null;
+$releaseArchivePath = null;
 foreach ($files as $file) {
-    if (str_contains($file, "release") && str_ends_with($file, ".zip")) {
-        $zipFile = $rootFolder . "/" . $file;
+    if (str_contains($file, "release") && str_ends_with($file, ".tar")) {
+        $releaseArchivePath = $rootFolder . "/" . $file;
         break;
     }
 }
 
-if (file_exists($zipFile)) {
-    $zipArchive = new ZipArchive();
-    $openResult = $zipArchive->open($zipFile, ZipArchive::RDONLY);
-    if ($openResult !== true) {
-        throw new Exception("Cannot open ZIP File '$zipFile' ($openResult)");
-    }
-    $zipArchive->extractTo($rootFolder);
-    $zipArchive->close();
-    unlink($zipFile);
+if (file_exists($releaseArchivePath)) {
+    $archive = new PharData($releaseArchivePath);
+    $archive->extractTo($rootFolder, overwrite: true);
+    unlink($releaseArchivePath);
 }
 
 if (!file_exists($moduleFile)) {
