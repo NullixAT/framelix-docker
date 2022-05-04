@@ -10,7 +10,7 @@ More [how Docker itself works here](https://docs.docker.com/get-docker/).
 
 ### Production Setup
 
-```shell
+```
 mkdir myappinstance
 cd myappinstance
 wget {GITHUB_HTTPS_REPO_URL}/releases/latest/download/docker-release.tar -O docker-release.tar
@@ -26,12 +26,14 @@ always, also after host reboot.
 
 ### Development Setup
 
-    git clone https://github.com/NullixAT/framelix-docker.git
-    cd framelix-docker
-    cp config/env-default .env
-    git clone --recurse-submodules --branch main YOUR_APP_REPOSITORY_URL app
-    docker-compose build
-    docker-compose up -d
+```
+git clone https://github.com/NullixAT/framelix-docker.git
+cd framelix-docker
+cp config/env-default .env
+git clone --recurse-submodules --branch main YOUR_APP_REPOSITORY_URL app
+docker-compose build
+docker-compose up -d
+```
 
 Open `https://yourdomainorip:8686` and follow instructions in your browser. The container is configured to restart
 always, also after host reboot.
