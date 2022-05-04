@@ -1,8 +1,10 @@
 #!/bin/bash
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
+echo ""
 echo "===Docker Instance Update==="
+echo ""
 echo "This script will download the current docker-update.zip corresponding to the latest app version you have installed"
 echo "WARNING: This will override existing docker config and maybe update some containers (Nginx, Php, Mysql updates)"
 echo "It is recommended to have a backup before updating"
@@ -26,7 +28,7 @@ status=$?
 
 echo ""
 if test $status -ne 0; then
-  echo "Error while fetching docker-update.zip"
+  echo "Error while fetching docker-update.tar"
   exit 1
 fi
 
