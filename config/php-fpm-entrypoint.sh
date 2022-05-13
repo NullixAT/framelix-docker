@@ -1,40 +1,39 @@
 #!/bin/bash
 
+USERNAME=$(id -n -u ${USER_ID})
+GROUPNAME=$(id -n -u ${GROUP_ID})
+
 NODEDIR="/usr/local/lib/nodejs"
 if [ ! -d "$NODEDIR/bin" ]; then
   echo "===Downloading NodeJS==="
   wget -qO- https://nodejs.org/dist/v16.14.2/node-v16.14.2-linux-x64.tar | tar -xv --strip 1 -C $NODEDIR
+  chown $USER_ID:$GROUP_ID -R $NODEDIR
   echo "===Done==="
   echo ""
 fi
 
 echo "===Creating NodeJS Symlinks==="
-ln -s $NODEDIR/bin/node /usr/bin/node
-ln -s $NODEDIR/bin/npm /usr/bin/npm
+ln -s -f $NODEDIR/bin/node /usr/bin/node
+ln -s -f $NODEDIR/bin/npm /usr/bin/npm
 echo "===Done==="
-  echo ""
+echo ""
 
 echo "===Starting cron==="
 service cron start
 echo "===Done==="
-  echo ""
+echo ""
 
 echo "===Running Framelix Bootstrap==="
-/opt/bitnami/php/bin/php /framelix-scripts/php-fpm-entrypoint-bootstrap.php
+runuser -u $USERNAME -g $GROUPNAME /opt/bitnami/php/bin/php /framelix-scripts/php-fpm-entrypoint-bootstrap.php
 status=$?
 
 if test $status -eq 0; then
   echo "===Done==="
   echo ""
 
-  echo "===Forcing all appfiles to run under daemon user==="
-  chown -R daemon:daemon /framelix
-  echo "===Done==="
-  echo ""
-
-  echo "===Run NPM install in modules/Framelix ==="
-    cd /framelix/modules/Framelix
-    npm install
+  echo "===Run NPM install in modules/Framelix==="
+  cd /framelix/modules/Framelix
+  npm install
   echo "===Done==="
   echo ""
 

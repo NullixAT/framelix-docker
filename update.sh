@@ -48,8 +48,9 @@ rm -Rf $SCRIPT_DIR/app/modules/Framelix/tmp/docker-update
 echo ""
 echo ""
 
-echo "Rebuild the container to applying updates with docker-compose build"
+echo "Pulling and rebuild the container to applying updates with docker-compose pull && docker-compose build"
 echo ""
+docker-compose pull
 docker-compose build
 echo ""
 echo ""

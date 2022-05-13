@@ -17,8 +17,7 @@ wget {GITHUB_HTTPS_REPO_URL}/releases/latest/download/docker-release.tar -O dock
 tar xf docker-release.tar
 rm docker-release.tar
 cp config/env-default .env
-docker-compose build
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 Open `https://yourdomainorip:8686` and follow instructions in your browser. The container is configured to restart
@@ -31,8 +30,7 @@ git clone https://github.com/NullixAT/framelix-docker.git
 cd framelix-docker
 cp config/env-default .env
 git clone --recurse-submodules --branch main YOUR_APP_REPOSITORY_URL app
-docker-compose build
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 Open `https://yourdomainorip:8686` and follow instructions in your browser. The container is configured to restart

@@ -30,7 +30,11 @@ services:
                 chmod 0777 /opt/bitnami/scripts/nginx/framelix-run.sh && 
                 /opt/bitnami/scripts/nginx/framelix-run.sh"
   phpfpm:
-    build: .
+    build:
+      context: .
+      args:
+        USER_ID: ${USER_ID:-0}
+        GROUP_ID: ${GROUP_ID:-0}
     restart: always
     depends_on:
       - db
@@ -40,7 +44,7 @@ services:
       - ./app:/framelix
       - ./nodejs:/usr/local/lib/nodejs
       - ./config/php-fpm-entrypoint-bootstrap.php:/framelix-scripts/php-fpm-entrypoint-bootstrap.php
-      - ./config/php-fpm.conf:/opt/bitnami/php/etc/php-fpm.d/www-custom.conf
+      - ./config/php-fpm.conf:/opt/bitnami/php/etc/php-fpm.d/www.conf
     environment:
       - FRAMELIX_MODULE
       - FRAMELIX_SETUP_DB_HOST=db
@@ -48,6 +52,8 @@ services:
       - FRAMELIX_SETUP_DB_PASS=app
       - FRAMELIX_SETUP_DB_NAME=app
       - FRAMELIX_DOCKER_VERSION=1.0.0
+      - USER_ID
+      - GROUP_ID
   db:
     image: mariadb:10.7
     restart: always
@@ -60,3 +66,4 @@ services:
       MARIADB_USER: app
       MARIADB_PASSWORD: app
       MARIADB_DATABASE: app
+      MARIADB_AUTO_UPGRADE: 1

@@ -1,3 +1,13 @@
+# change user_id and group_id to match your user that is allowed to
+# read/write/execute files in app/* and nodejs/*
+# default is 0, which is root, which should be avoided whenever possible
+# find your current user id and group id with the command: id -u && id -g
+USER_ID=0
+GROUP_ID=0
+
+# portmapping, :443 maps to https, :80 maps to http
 WEBPORT_MAP=8686:443
+
+# in case you want provide own cert files
 NGINX_SSL_CERT=./config/nginx-selfsigned.crt
 NGINX_SSL_KEY=./config/nginx-selfsigned.key
