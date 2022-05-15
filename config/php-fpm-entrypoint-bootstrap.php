@@ -12,6 +12,20 @@ if (
     return;
 }
 
+// wait for db to run
+$count = 1;
+while (true) {
+    try {
+        $mysql = new mysqli("db", "app", "app", "app");
+        break;
+    } catch (Exception $e) {
+        echo "Wait for db container ($count)... (" . $e->getMessage() . ")\n";
+        $count++;
+    }
+    sleep(1);
+}
+
+
 // check if backup exist, if so, import
 if (file_exists($rootFolder . "/backup.zip")) {
     // to many files in folder, stop
@@ -20,17 +34,6 @@ if (file_exists($rootFolder . "/backup.zip")) {
         exit(1);
     }
 
-    // wait for db to run
-    while (true) {
-        try {
-            $mysql = new mysqli("db", "app", "app", "app");
-            break;
-        } catch (Exception $e) {
-        }
-        sleep(1);
-    }
-
-    $mysql = new mysqli("db", "app", "app", "app");
     $releaseArchivePath = $rootFolder . "/backup.zip";
     $zipArchive = new ZipArchive();
     $openResult = $zipArchive->open($releaseArchivePath, ZipArchive::RDONLY);
@@ -74,6 +77,7 @@ foreach ($files as $file) {
     }
 }
 
+// install release file
 if (file_exists($releaseArchivePath)) {
     $status = -1;
     $out = null;
@@ -87,6 +91,10 @@ if (file_exists($releaseArchivePath)) {
         exit($status);
     }
     unlink($releaseArchivePath);
+    // cleanup database in case of any previous existance of data (mostly for dev reasons)
+    $mysql->query('DROP DATABASE app');
+    $mysql->query('CREATE DATABASE app');
+    $mysql->query('USE app');
 }
 
 if (!file_exists($moduleFile)) {
