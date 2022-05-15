@@ -62,7 +62,7 @@ services:
     volumes:
       - ./db:/var/lib/mysql
     environment:
-      MARIADB_ROOT_PASSWORD: 1
+      MARIADB_RANDOM_ROOT_PASSWORD : 1
       MARIADB_USER: app
       MARIADB_PASSWORD: app
       MARIADB_DATABASE: app
