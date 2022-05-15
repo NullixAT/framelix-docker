@@ -31,9 +31,16 @@ if test $status -eq 0; then
   echo "===Done==="
   echo ""
 
-  echo "===Run NPM install in modules/Framelix==="
-  cd /framelix/modules/Framelix
-  npm install
+  echo "===Run NPM install in modules/*==="
+  for d in /framelix/modules/*/ ; do
+    if test -f "$d/package.json"; then
+      echo "NPM install in $d..."
+      cd $d
+      npm install
+      echo "OK"
+      echo ""
+    fi
+  done
   echo "===Done==="
   echo ""
 
