@@ -75,8 +75,17 @@ foreach ($files as $file) {
 }
 
 if (file_exists($releaseArchivePath)) {
-    $archive = new PharData($releaseArchivePath);
-    $archive->extractTo($rootFolder, overwrite: true);
+    $status = -1;
+    $out = null;
+    exec(
+        "tar --overwrite -xf " . escapeshellarg($releaseArchivePath) . " -C " . escapeshellarg($rootFolder),
+        $out,
+        $status
+    );
+    if ($status) {
+        echo implode("\n", $out);
+        exit($status);
+    }
     unlink($releaseArchivePath);
 }
 
