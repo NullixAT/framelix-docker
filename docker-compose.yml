@@ -51,7 +51,7 @@ services:
       - FRAMELIX_SETUP_DB_USER=app
       - FRAMELIX_SETUP_DB_PASS=app
       - FRAMELIX_SETUP_DB_NAME=app
-      - FRAMELIX_DOCKER_VERSION=1.0.1
+      - FRAMELIX_DOCKER_VERSION=1.0.2
       - USER_ID
       - GROUP_ID
   db:
@@ -62,7 +62,7 @@ services:
     volumes:
       - ./db:/var/lib/mysql
     environment:
-      MARIADB_RANDOM_ROOT_PASSWORD : 1
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
       MARIADB_USER: app
       MARIADB_PASSWORD: app
       MARIADB_DATABASE: app
