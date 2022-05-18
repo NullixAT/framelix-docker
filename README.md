@@ -71,13 +71,13 @@ All database files are in the folder `db`.
 
 You can either backup the whole `db` folder or you can do a proper sql dump with:
 
-`docker-compose exec db mysqldump app -u app -papp > backup.sql` which stores a backup to `backup.sql`
+`docker-compose exec -T db mysqldump app -u app -papp > backup.sql` which stores a backup to `backup.sql`
 
 ## Restore database
 
 Restore from a dump sql file:
 
-`docker-compose exec db mysql app -u app -papp app < backup.sql`
+`docker-compose exec -T db mysql app -u app -papp -D app < backup.sql`
 
 Or, if you have a backup of the whole `db` folder:
 
