@@ -75,9 +75,12 @@ You can either backup the whole `db` folder or you can do a proper sql dump with
 
 ## Restore database
 
-Restore from a dump sql file:
+Restore from a dump sql file (Warning: This delete the whole database):
 
-`docker-compose exec -T db mysql app -u app -papp -D app < backup.sql`
+```
+docker-compose exec -T db mysql app -u app -papp --default-character-set=utf8 -D app -e 'DROP DATABASE app; CREATE DATABASE app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'
+docker-compose exec -T db mysql app -u app -papp --default-character-set=utf8 -D app < backup.sql
+```
 
 Or, if you have a backup of the whole `db` folder:
 
