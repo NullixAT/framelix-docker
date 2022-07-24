@@ -3,6 +3,9 @@
 USERNAME=$(id -n -u ${USER_ID})
 GROUPNAME=$(id -n -u ${GROUP_ID})
 
+echo Running with USER/USER_ID: $USERNAME/$USER_ID
+echo Running with GROUP/GROUP_ID: $GROUPNAME/$GROUP_ID
+
 NODEDIR="/usr/local/lib/nodejs"
 if [ ! -d "$NODEDIR/bin" ]; then
   echo "===Downloading NodeJS==="
